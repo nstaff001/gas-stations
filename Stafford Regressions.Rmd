@@ -1,0 +1,43 @@
+---
+title: "Regressions"
+author: "nstaff001"
+date: "2024-05-23"
+output: html_document
+---
+```{r}
+library('dplyr', 'tidyverse')
+library('plm')
+library('stargazer')
+```
+
+Filtering the data
+```{r}
+gas_data <- readr :: read_csv("C:path...stafford_gas_prices.csv")
+attach(gas_data)
+gas_data <- gas_data[gas_data$date > "YYYY-MM-DD",] # desired date range
+```
+```{r}
+brand_data <- filter(gas_data, name %in% c('Exxon', 'QuikTrip', 'Texaco', 'Chevron', 'Shell', 'Valero', 'Mobil')) # list of desired brands
+brand_data$name <- factor(brand_data$name) # necessary for categorical analysis
+```
+
+Regression models
+```{r}
+fixed_eff1 <- plm(price ~ num_radius, data=gas_data, index=c("full_address", "date"), model="random", effect='time')
+summary(fixed_eff1)
+```
+```{r}
+fixed_eff2 <- plm(price ~ num_radius + wti, data=gas_data, index=c("full_address", "date"), model="random")
+summary(fixed_eff2)
+```
+```{r}
+fixed_eff3 <- plm(price ~ num_radius + wti + name, data=brand_data, index=c("full_address", "date"), model="random")
+summary(fixed_eff3)
+```
+
+Saving the models' outputs
+```{r}
+setwd("C:path")
+
+stargazer(fixed_eff1, fixed_eff2, fixed_eff3, type = 'html', title = 'Panel Random Fixed Effects', dep.var.labels = 'Price', covariate.labels = c('Stations Within Half Mile', 'WTI', 'Exxon', 'Mobil', 'QuikTrip', 'Shell', 'Texaco', 'Valero'), digits = 2, out = 'stafford_panel_models.html', keep.stat = c('n','rsq', 'adj.rsq'), notes = c("Prices are in USD/gallon,", "WTI is in USD/barrel, and", "Chevron is the reference category"), notes.align='l')
+```
