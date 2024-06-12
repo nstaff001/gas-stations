@@ -23,3 +23,5 @@ In the future, I would like to incorporate more control variables, collect data 
 This will provide me with a more accurate picture of the mechanics within the gas market and potentially hint at consumer behavior in general. I am interested in two 
 subjects: consumer behavior and spatial economics. This study catered to both interests as well as taught me how to webscrape, clean and merge datasets, and perform 
 statistical analysis in R.
+
+Edit: I have since added Tableau visualizations of the data collected in this project. The packaged workbook will include a sample of the data collected as well as three interactive maps illustrating the dynamics of competition in Fort Worth's gasoline market on May 6th, 2024. If you do not have access to Tableau Desktop, you can download Tableau Reader for free here: https://www.tableau.com/products/reader.
